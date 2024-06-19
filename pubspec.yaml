@@ -1,5 +1,5 @@
 name: countries_app
-description: My new Countries Flutter app
+description: Countries Flutter app
 version: 1.0.0+1
 publish_to: none
 
@@ -13,6 +13,8 @@ dependencies:
   flutter_bloc: ^8.1.4
   flutter_localizations:
     sdk: flutter
+  #http service
+  http: ^1.2.1
   intl: ^0.19.0
 
 dev_dependencies:
