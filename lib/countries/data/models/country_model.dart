@@ -12,7 +12,7 @@ class Country {
     name = json['name'] != null
         ? Name.fromJson(json['name'] as Map<String, dynamic>)
         : null;
-    continents = json['continents'] as List<String>;
+    continents = List<String>.from(json['continents'] as List);
   }
 
   Map<String, dynamic> toJson() {
@@ -23,7 +23,7 @@ class Country {
     if (name != null) {
       data['name'] = name!.toJson();
     }
-    data['continents'] = this.continents;
+    data['continents'] = continents;
     return data;
   }
 }
