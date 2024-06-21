@@ -1,5 +1,6 @@
 import 'package:countries_app/countries/data/country_repository.dart';
 import 'package:countries_app/countries/data/models/country_model.dart';
+import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
 
 import '../components/country_tile.dart';
@@ -16,6 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final List<Country> _countries = <Country>[];
+  List<Country> _countriesFiltered = <Country>[];
   List<Country> _countriesDisplay = <Country>[];
   bool _isLoading = true;
   SortType sorting = SortType.name;
@@ -31,8 +33,8 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _isLoading = false;
         _countries.addAll(value);
-        _countriesDisplay = _countries;
-        sortCountries(SortType.name);
+        sortCountries(SortType.name, _countries);
+        _countriesDisplay.addAll(_countries);
         print(_countriesDisplay.length);
       });
     });
@@ -60,6 +62,18 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+            onPressed: _openFilterDialog,
+            child: const Icon(Icons.filter_list_alt),
+          ),
+        ],
+      ),
     );
   }
 
@@ -71,7 +85,6 @@ class _HomePageState extends State<HomePage> {
         children: [
           Row(
             children: [
-              //use expended if you are using textformfield in row
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
@@ -89,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                     onChanged: (searchText) {
                       searchText = searchText.toLowerCase();
                       setState(() {
-                        _countriesDisplay = _countries.where((c) {
+                        _countriesDisplay = _countriesFiltered.where((c) {
                           final name = '${c.name?.common} ${c.name?.official}'
                               .toLowerCase();
                           final continent =
@@ -112,7 +125,7 @@ class _HomePageState extends State<HomePage> {
               ),
               InkWell(
                 onTap: () {
-                  sortCountries(
+                  sortCountriesListView(
                     sorting == SortType.name
                         ? SortType.continent
                         : SortType.name,
@@ -147,11 +160,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void sortCountries(SortType type) {
-    setState(() {
-      sorting = type;
-    });
-    _countriesDisplay.sort((a, b) {
+  void sortCountries(SortType type, List<Country> countries) {
+    countries.sort((a, b) {
       switch (type) {
         case SortType.name:
           final nameA = a.name?.common?.toLowerCase();
@@ -173,5 +183,58 @@ class _HomePageState extends State<HomePage> {
           return 0;
       }
     });
+  }
+
+  void sortCountriesListView(SortType type) {
+    setState(() {
+      sorting = type;
+    });
+    sortCountries(type, _countriesDisplay);
+  }
+
+  Future<void> _openFilterDialog() async {
+    setState(() {
+      _isLoading = true;
+    });
+    await FilterListDialog.display<Country>(
+      context,
+      hideSelectedTextCount: true,
+      themeData: FilterListThemeData(
+        context,
+        choiceChipTheme: ChoiceChipThemeData.light(context),
+      ),
+      headlineText: 'Select Countries',
+      hideSearchField: true,
+      height: 500,
+      listData: _countries,
+      selectedListData: _countriesFiltered,
+      choiceChipLabel: (item) {
+        if (item != null && item.name != null && item.name?.common != null) {
+          return item.name?.common;
+        } else {
+          return '';
+        }
+      },
+      validateSelectedItem: (list, val) => list != null && list.contains(val),
+      controlButtons: [ControlButtonType.All, ControlButtonType.Reset],
+      onItemSearch: (user, query) {
+        return false;
+      },
+      onApplyButtonClick: (list) {
+        setState(() {
+          _countriesFiltered = list != null ? List.from(list) : List.empty();
+          _countriesDisplay = _countriesFiltered;
+          sortCountriesListView(sorting);
+        });
+        Navigator.pop(context);
+      },
+      onCloseWidgetPress: () {
+        Navigator.pop(context);
+      },
+    ).whenComplete(
+      () => setState(() {
+        _isLoading = false;
+      }),
+    );
   }
 }
