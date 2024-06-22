@@ -1,10 +1,9 @@
-import 'package:countries_app/countries/data/country_repository.dart';
-import 'package:countries_app/countries/data/models/country_model.dart';
+import 'package:countries_app/countries/data/api/models/country_details_model.dart';
+import 'package:countries_app/countries/data/countries_repository.dart';
+import 'package:countries_app/countries/presentation/components/country_tile.dart';
+import 'package:countries_app/countries/presentation/components/loading_widget.dart';
 import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
-
-import '../components/country_tile.dart';
-import '../components/loading_widget.dart';
 
 enum SortType { name, continent }
 
@@ -16,9 +15,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<Country> _countries = <Country>[];
-  List<Country> _countriesFiltered = <Country>[];
-  List<Country> _countriesDisplay = <Country>[];
+  final _countriesRepository = CountriesRepository();
+  final List<CountryDetails> _countries = <CountryDetails>[];
+  List<CountryDetails> _countriesFiltered = <CountryDetails>[];
+  List<CountryDetails> _countriesDisplay = <CountryDetails>[];
   bool _isLoading = true;
   SortType sorting = SortType.name;
 
@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void loadCountries() {
-    fetchCountries().then((value) {
+    _countriesRepository.getCountries().then((value) {
       setState(() {
         _isLoading = false;
         _countries.addAll(value);
@@ -160,7 +160,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void sortCountries(SortType type, List<Country> countries) {
+  void sortCountries(SortType type, List<CountryDetails> countries) {
     countries.sort((a, b) {
       switch (type) {
         case SortType.name:
@@ -196,7 +196,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _isLoading = true;
     });
-    await FilterListDialog.display<Country>(
+    await FilterListDialog.display<CountryDetails>(
       context,
       hideSelectedTextCount: true,
       themeData: FilterListThemeData(

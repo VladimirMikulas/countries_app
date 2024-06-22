@@ -1,8 +1,9 @@
-import 'package:countries_app/countries/data/models/country_model.dart';
+import 'package:countries_app/countries/data/api/models/country_details_model.dart';
 import 'package:flutter/material.dart';
 
+
 class CountryTile extends StatelessWidget {
-  final Country country;
+  final CountryDetails country;
 
   CountryTile({required this.country});
 
@@ -28,7 +29,10 @@ class CountryTile extends StatelessWidget {
               /*Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => CountryDetailsPage(country: country)),
+                  builder: (context) => CountryDetailsPage(
+                    countryDetails: country,
+                  ),
+                ),
               );*/
             },
           ),
