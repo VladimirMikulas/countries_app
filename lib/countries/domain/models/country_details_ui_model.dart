@@ -22,26 +22,34 @@ class CountryDetailsUiModel {
     required this.continents,
     required this.currencies,
     required this.languages,
-    this.coordinates,
     required this.timezones,
     required this.flag,
+    this.coordinates,
   });
 }
 
 CountryDetailsUiModel toCountryDetailsUiModel(CountryDetailsModel model) {
   return CountryDetailsUiModel(
-      commonName: model.name?.common ?? '',
-      officialName: model.name?.official ?? '',
-      capital: model.capital ?? List.empty(),
-      population: model.population ?? -1,
-      continents: model.continents ?? List.empty(),
-      currencies:
-          model.currencies?.entries.map((e) => e.value.name ?? '').toList() ??
-              List.empty(),
-      languages: model.languages?.entries.map((e) => e.value).toList() ??
-          List.empty(),
-      coordinates:
-          CoordinatesModel(model.latlng?.first ?? -1, model.latlng?.last ?? -1),
-      timezones: model.timezones ?? List.empty(),
-      flag: model.flags?.png ?? '');
+    commonName: model.name?.common ?? '',
+    officialName: model.name?.official ?? '',
+    capital: model.capital ?? List.empty(),
+    population: model.population ?? -1,
+    continents: model.continents ?? List.empty(),
+    currencies:
+        model.currencies?.entries.map((e) => e.value.name ?? '').toList() ??
+            List.empty(),
+    languages:
+        model.languages?.entries.map((e) => e.value).toList() ?? List.empty(),
+    coordinates: getCoordinatesModel(model.latlng),
+    timezones: model.timezones ?? List.empty(),
+    flag: model.flags?.png ?? '',
+  );
+}
+
+CoordinatesModel? getCoordinatesModel(List<double>? latLng) {
+  if (latLng == null) {
+    return null;
+  } else {
+    return CoordinatesModel(latLng.first, latLng.last);
+  }
 }

@@ -1,7 +1,13 @@
 {
     "@@locale": "es",
-    "counterAppBarTitle": "Contador",
-    "@counterAppBarTitle": {
-        "description": "Texto mostrado en la AppBar de la página del contador"
-    }
+    "countriesAppBarTitle": "",
+    "searchBarHint": "",
+    "filterDialogHeadline": "",
+    "capitalDetailItemLabel": "",
+    "populationDetailItemLabel": "",
+    "continentsDetailItemLabel": "",
+    "currenciesDetailItemLabel": "",
+    "languagesDetailItemLabel": "",
+    "timezonesDetailItemLabel": "",
+    "loading": ""
 }

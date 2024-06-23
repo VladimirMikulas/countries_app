@@ -1,7 +1,13 @@
 {
     "@@locale": "en",
-    "counterAppBarTitle": "Counter",
-    "@counterAppBarTitle": {
-        "description": "Text shown in the AppBar of the Counter Page"
-    }
+    "countriesAppBarTitle": "Countries",
+    "searchBarHint": "Search here...",
+    "filterDialogHeadline": "Select Countries",
+    "capitalDetailItemLabel": "Capital:",
+    "populationDetailItemLabel": "Population:",
+    "continentsDetailItemLabel": "Continents:",
+    "currenciesDetailItemLabel": "Currencies:",
+    "languagesDetailItemLabel": "Languages:",
+    "timezonesDetailItemLabel": "Timezones:",
+    "loading": "Loading ..."
 }

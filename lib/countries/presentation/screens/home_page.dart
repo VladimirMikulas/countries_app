@@ -1,10 +1,10 @@
 import 'package:countries_app/countries/domain/get_countries.dart';
+import 'package:countries_app/countries/domain/models/country_details_ui_model.dart';
 import 'package:countries_app/countries/presentation/components/country_tile.dart';
 import 'package:countries_app/countries/presentation/components/loading_widget.dart';
+import 'package:countries_app/l10n/l10n.dart';
 import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
-
-import '../../domain/models/country_details_ui_model.dart';
 
 enum SortType { name, continent }
 
@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
   List<CountryDetailsUiModel> _countriesDisplay = <CountryDetailsUiModel>[];
   bool _isLoading = true;
   SortType sorting = SortType.name;
+  late AppLocalizations l10n;
 
   @override
   void initState() {
@@ -34,6 +35,7 @@ class _HomePageState extends State<HomePage> {
         _isLoading = false;
         _countries.addAll(value);
         sortCountries(SortType.name, _countries);
+        _countriesFiltered.addAll(_countries);
         _countriesDisplay.addAll(_countries);
         print(_countriesDisplay.length);
       });
@@ -42,9 +44,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    l10n = context.l10n;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Countries'),
+        title: Text(l10n.countriesAppBarTitle),
       ),
       body: SafeArea(
         child: Container(
@@ -112,10 +115,10 @@ class _HomePageState extends State<HomePage> {
                         }).toList();
                       });
                     },
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Search here...',
-                      prefixIcon: Icon(Icons.search),
+                      hintText: l10n.searchBarHint,
+                      prefixIcon: const Icon(Icons.search),
                     ),
                   ),
                 ),
@@ -193,7 +196,7 @@ class _HomePageState extends State<HomePage> {
         context,
         choiceChipTheme: ChoiceChipThemeData.light(context),
       ),
-      headlineText: 'Select Countries',
+      headlineText: l10n.filterDialogHeadline,
       hideSearchField: true,
       height: 500,
       listData: _countries,

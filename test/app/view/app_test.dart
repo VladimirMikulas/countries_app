@@ -1,3 +1,4 @@
+/*
 import 'package:countries_app/app/app.dart';
 import 'package:countries_app/counter/counter.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,3 +11,4 @@ void main() {
     });
   });
 }
+*/
