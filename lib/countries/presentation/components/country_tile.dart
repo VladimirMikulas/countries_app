@@ -1,9 +1,12 @@
 import 'package:countries_app/countries/data/api/models/country_details_model.dart';
 import 'package:flutter/material.dart';
 
+import '../../domain/models/country_details_ui_model.dart';
+import '../screens/country_details_page.dart';
+
 
 class CountryTile extends StatelessWidget {
-  final CountryDetails country;
+  final CountryDetailsUiModel country;
 
   CountryTile({required this.country});
 
@@ -15,25 +18,25 @@ class CountryTile extends StatelessWidget {
         children: [
           ListTile(
             leading: Hero(
-              tag: country.name?.common ?? '',
+              tag: country.commonName,
               child: CircleAvatar(
-                backgroundImage: NetworkImage(country.flags?.png ?? ''),
+                backgroundImage: NetworkImage(country.flag),
               ),
             ),
             trailing: const Icon(
               Icons.navigate_next,
             ),
-            title: Text('${country.name?.common}'),
-            subtitle: Text(country.continents?.join(', ') ?? ''),
+            title: Text(country.commonName),
+            subtitle: Text('${country.continents?.join(', ')}'),
             onTap: () {
-              /*Navigator.push(
+              Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => CountryDetailsPage(
                     countryDetails: country,
                   ),
                 ),
-              );*/
+              );
             },
           ),
           const Divider(

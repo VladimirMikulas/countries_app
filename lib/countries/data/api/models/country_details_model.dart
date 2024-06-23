@@ -3,10 +3,10 @@ import 'package:json_annotation/json_annotation.dart';
 part 'country_details_model.g.dart';
 
 @JsonSerializable()
-class CountryDetails {
+class CountryDetailsModel {
   @JsonKey(includeIfNull: false)
-  final Name? name;
-  final Map<String, Currency>? currencies;
+  final NameModel? name;
+  final Map<String, CurrencyModel>? currencies;
   final List<String>? capital;
   final Map<String, String>? languages;
   final List<double>? latlng;
@@ -15,10 +15,10 @@ class CountryDetails {
   final List<String>? continents;
   final Flags? flags;
 
-  factory CountryDetails.fromJson(Map<String, dynamic> json) =>
+  factory CountryDetailsModel.fromJson(Map<String, dynamic> json) =>
       _$CountryDetailsFromJson(json);
 
-  const CountryDetails({
+  const CountryDetailsModel({
     this.name,
     this.currencies,
     this.capital,
@@ -34,13 +34,13 @@ class CountryDetails {
 }
 
 @JsonSerializable()
-class Name {
+class NameModel {
   final String? common;
   final String? official;
 
-  factory Name.fromJson(Map<String, dynamic> json) => _$NameFromJson(json);
+  factory NameModel.fromJson(Map<String, dynamic> json) => _$NameFromJson(json);
 
-  const Name({
+  const NameModel({
     this.common,
     this.official,
   });
@@ -49,14 +49,14 @@ class Name {
 }
 
 @JsonSerializable()
-class Currency {
+class CurrencyModel {
   final String? name;
   final String? symbol;
 
-  factory Currency.fromJson(Map<String, dynamic> json) =>
+  factory CurrencyModel.fromJson(Map<String, dynamic> json) =>
       _$CurrencyFromJson(json);
 
-  const Currency({
+  const CurrencyModel({
     this.name,
     this.symbol,
   });

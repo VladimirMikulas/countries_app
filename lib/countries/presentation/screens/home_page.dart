@@ -1,9 +1,10 @@
-import 'package:countries_app/countries/data/api/models/country_details_model.dart';
-import 'package:countries_app/countries/data/countries_repository.dart';
+import 'package:countries_app/countries/domain/get_countries.dart';
 import 'package:countries_app/countries/presentation/components/country_tile.dart';
 import 'package:countries_app/countries/presentation/components/loading_widget.dart';
 import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
+
+import '../../domain/models/country_details_ui_model.dart';
 
 enum SortType { name, continent }
 
@@ -15,10 +16,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _countriesRepository = CountriesRepository();
-  final List<CountryDetails> _countries = <CountryDetails>[];
-  List<CountryDetails> _countriesFiltered = <CountryDetails>[];
-  List<CountryDetails> _countriesDisplay = <CountryDetails>[];
+  final List<CountryDetailsUiModel> _countries = <CountryDetailsUiModel>[];
+  List<CountryDetailsUiModel> _countriesFiltered = <CountryDetailsUiModel>[];
+  List<CountryDetailsUiModel> _countriesDisplay = <CountryDetailsUiModel>[];
   bool _isLoading = true;
   SortType sorting = SortType.name;
 
@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void loadCountries() {
-    _countriesRepository.getCountries().then((value) {
+    GetCountries().call().then((value) {
       setState(() {
         _isLoading = false;
         _countries.addAll(value);
@@ -103,10 +103,10 @@ class _HomePageState extends State<HomePage> {
                       searchText = searchText.toLowerCase();
                       setState(() {
                         _countriesDisplay = _countriesFiltered.where((c) {
-                          final name = '${c.name?.common} ${c.name?.official}'
+                          final name = '${c.commonName} ${c.officialName}'
                               .toLowerCase();
                           final continent =
-                              c.continents?.join(' ').toLowerCase() ?? '';
+                              c.continents.join(' ').toLowerCase();
                           return name.contains(searchText) ||
                               continent.contains(searchText);
                         }).toList();
@@ -160,27 +160,17 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void sortCountries(SortType type, List<CountryDetails> countries) {
+  void sortCountries(SortType type, List<CountryDetailsUiModel> countries) {
     countries.sort((a, b) {
       switch (type) {
         case SortType.name:
-          final nameA = a.name?.common?.toLowerCase();
-          final nameB = b.name?.common?.toLowerCase();
-          if (nameA != null && nameB != null) {
-            return nameA.compareTo(nameB);
-          }
-          return 0;
+          final nameA = a.commonName.toLowerCase();
+          final nameB = b.commonName.toLowerCase();
+          return nameA.compareTo(nameB);
         case SortType.continent:
-          final nameA = a.continents != null && a.continents!.isNotEmpty
-              ? a.continents?.first.toLowerCase()
-              : null;
-          final nameB = b.continents != null && b.continents!.isNotEmpty
-              ? b.continents?.first.toLowerCase()
-              : null;
-          if (nameA != null && nameB != null) {
-            return nameA.compareTo(nameB);
-          }
-          return 0;
+          final nameA = a.continents.first.toLowerCase();
+          final nameB = b.continents.first.toLowerCase();
+          return nameA.compareTo(nameB);
       }
     });
   }
@@ -196,7 +186,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _isLoading = true;
     });
-    await FilterListDialog.display<CountryDetails>(
+    await FilterListDialog.display<CountryDetailsUiModel>(
       context,
       hideSelectedTextCount: true,
       themeData: FilterListThemeData(
@@ -209,11 +199,7 @@ class _HomePageState extends State<HomePage> {
       listData: _countries,
       selectedListData: _countriesFiltered,
       choiceChipLabel: (item) {
-        if (item != null && item.name != null && item.name?.common != null) {
-          return item.name?.common;
-        } else {
-          return '';
-        }
+        item?.commonName ?? '';
       },
       validateSelectedItem: (list, val) => list != null && list.contains(val),
       controlButtons: [ControlButtonType.All, ControlButtonType.Reset],

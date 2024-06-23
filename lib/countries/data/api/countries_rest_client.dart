@@ -9,7 +9,7 @@ part 'countries_rest_client.g.dart';
 abstract class CountriesRestClient {
   factory CountriesRestClient(Dio dio) = _CountriesRestClient;
 
-  @GET('/all?fields=name,continents,flags')
-  Future<List<CountryDetails>> getCountries(@Query('fields') String fields);
+  @GET('/all')
+  Future<List<CountryDetailsModel>> getCountries(@Query('fields') String fields);
 
 }

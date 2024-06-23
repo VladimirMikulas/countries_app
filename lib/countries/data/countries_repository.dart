@@ -8,6 +8,6 @@ class CountriesRepository {
       'name,currencies,capital,languages,latlng,population,timezones,continents,flags';
   final _restClient = CountriesRestClient(Dio());
 
-  Future<List<CountryDetails>> getCountries() =>
+  Future<List<CountryDetailsModel>> getCountries() =>
       _restClient.getCountries(countryFields);
 }
