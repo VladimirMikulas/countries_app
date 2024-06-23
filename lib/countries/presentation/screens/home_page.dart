@@ -199,7 +199,7 @@ class _HomePageState extends State<HomePage> {
       listData: _countries,
       selectedListData: _countriesFiltered,
       choiceChipLabel: (item) {
-        item?.commonName ?? '';
+        return item?.commonName ?? '';
       },
       validateSelectedItem: (list, val) => list != null && list.contains(val),
       controlButtons: [ControlButtonType.All, ControlButtonType.Reset],

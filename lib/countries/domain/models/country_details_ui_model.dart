@@ -38,7 +38,7 @@ CountryDetailsUiModel toCountryDetailsUiModel(CountryDetailsModel model) {
       currencies:
           model.currencies?.entries.map((e) => e.value.name ?? '').toList() ??
               List.empty(),
-      languages: model.languages?.entries.map((e) => e.value ?? '').toList() ??
+      languages: model.languages?.entries.map((e) => e.value).toList() ??
           List.empty(),
       coordinates:
           CoordinatesModel(model.latlng?.first ?? -1, model.latlng?.last ?? -1),

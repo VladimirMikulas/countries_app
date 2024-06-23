@@ -1,8 +1,6 @@
-import 'package:countries_app/countries/data/api/models/country_details_model.dart';
+import 'package:countries_app/countries/domain/models/country_details_ui_model.dart';
+import 'package:countries_app/countries/presentation/screens/country_details_page.dart';
 import 'package:flutter/material.dart';
-
-import '../../domain/models/country_details_ui_model.dart';
-import '../screens/country_details_page.dart';
 
 
 class CountryTile extends StatelessWidget {
@@ -27,7 +25,7 @@ class CountryTile extends StatelessWidget {
               Icons.navigate_next,
             ),
             title: Text(country.commonName),
-            subtitle: Text('${country.continents?.join(', ')}'),
+            subtitle: Text(country.continents.join(', ')),
             onTap: () {
               Navigator.push(
                 context,
